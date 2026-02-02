@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נועם ניומן - GRC & Cyber Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f4f4; /* אפור בהיר */
+            --mustard: #e1ad01;  /* כתום חרדל */
+            --mustard-hover: #c49600;
+            --text-dark: #333;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 4px solid var(--mustard);
+            padding-bottom: 10px;
+        }
+
+        /* גריד של כפתורים */
+        #analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .analysis-card {
+            background-color: var(--mustard);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--mustard-hover);
+        }
+
+        /* מנגנון ה-Embed */
+        #viewer-container {
+            display: none; 
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 30px;
+            border: 2px solid var(--mustard);
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        embed {
+            width: 100%;
+            height: 80vh;
+        }
+
+        .close-btn {
+            background: #cc0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>נועם ניומן - ניתוח סיכוני סייבר ו-GRC</h1>
+        <p>תובנות מקצועיות על אירועי סייבר מזווית של ממשל, סיכונים וציות.</p>
+    </header>
+
+    <div id="analysis-grid">
+        </div>
+
+    <div id="viewer-container">
+        <button class="close-btn" onclick="closeViewer()">סגור תצוגה X</button>
+        <div id="pdf-placeholder"></div>
+    </div>
+
+    <script>
+        const analyses = [
+            { title: "ניתוח פריצת אנווידיה - היבטי ISO", file: "analyses/nvidia.pdf" },
+            { title: "סקירת רגולציית ה-DORA", file: "analyses/dora-review.pdf" },
+            { title: "ניהול סיכוני צד ג' - מקרה בוחן", file: "analyses/third-party.pdf" }
+        ];
+
+        const grid = document.getElementById('analysis-grid');
+        const viewer = document.getElementById('viewer-container');
+        const placeholder = document.getElementById('pdf-placeholder');
+
+        // פונקציה לרינדור הכפתורים
+        function renderButtons() {
+            grid.innerHTML = '';
+            analyses.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'analysis-card';
+                btn.innerText = item.title;
+                btn.onclick = () => openPDF(item.file);
+                grid.appendChild(btn);
+            });
+        }
+
+        function openPDF(filePath) {
+            placeholder.innerHTML = `<embed src="${filePath}" type="application/pdf">`;
+            viewer.style.display = 'block';
+            window.scrollTo({ top: viewer.offsetTop, behavior: 'smooth' });
+        }
+
+        function closeViewer() {
+            viewer.style.display = 'none';
+            placeholder.innerHTML = '';
+        }
+
+        renderButtons();
+    </script>
+</body>
+</html>
